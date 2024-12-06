@@ -2,24 +2,25 @@ package frc.robot.Subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Drivetrain extends SubsystemBase{
     // Declarations below
-    private final VictorSP leftmotor1;
-    private final VictorSP rightmotor1;
-    private final VictorSP leftmotor2;
-    private final VictorSP rightmotor2;
+    private final CANSparkMax leftmotor1;
+    private final CANSparkMax rightmotor1;
+    private final CANSparkMax leftmotor2;
+    private final CANSparkMax rightmotor2;
     private final DifferentialDrive differentialDrive;
 
     public Drivetrain() {
-        leftmotor1 = new VictorSP(8);
-        rightmotor1 = new VictorSP(6);
-        leftmotor2 = new VictorSP(9);
-        rightmotor2 = new VictorSP(7);
+        leftmotor1 = new CANSparkMax(8, MotorType.kBrushless);
+        rightmotor1 = new CANSparkMax(6, MotorType.kBrushless);
+        leftmotor2 = new CANSparkMax(9, MotorType.kBrushless);
+        rightmotor2 = new CANSparkMax(7, MotorType.kBrushless);
 
-        leftmotor1.addFollower(leftmotor2);
-        rightmotor1.addFollower(rightmotor2);
+        leftmotor1.follow(leftmotor2);
+        rightmotor1.follow(rightmotor2);
 
         leftmotor1.setInverted(true);
         differentialDrive = new DifferentialDrive(leftmotor1, rightmotor1);

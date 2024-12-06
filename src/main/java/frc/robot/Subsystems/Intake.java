@@ -1,17 +1,16 @@
 package frc.robot.Subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
-    private final VictorSP intakeMotor; // Motor for the intake system
-    private final VictorSP pivotMotor; // Motor for the pivot system
+    private final CANSparkMax intakeMotor; // Motor for the intake system
     private boolean isRunning; // Tracks whether the intake is running
 
     public Intake() {
-        intakeMotor = new VictorSP(2);
-        pivotMotor = new VictorSP(0);
+        intakeMotor = new CANSparkMax(2, MotorType.kBrushless);
         isRunning = false; // Initially, the intake is off
     }
 

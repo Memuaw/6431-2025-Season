@@ -1,16 +1,17 @@
 package frc.robot.Subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Shooter extends SubsystemBase {
 
-    private final VictorSP shooterMotor1;
-    private final VictorSP shooterMotor2;
+    private final CANSparkMax shooterMotor1;
+    private final CANSparkMax shooterMotor2;
 
     public Shooter() {
-        shooterMotor1 = new VictorSP(4);
-        shooterMotor2 = new VictorSP(5);
+        shooterMotor1 = new CANSparkMax(4, MotorType.kBrushless);
+        shooterMotor2 = new CANSparkMax(5, MotorType.kBrushless);
     }
 
     // Method to start the shooter
