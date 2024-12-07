@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends SubsystemBase{
     // Declarations below
@@ -28,6 +29,11 @@ public class Drivetrain extends SubsystemBase{
 
     public void tankDrive(double leftSpeed, double rightSpeed) {
         differentialDrive.tankDrive(leftSpeed, rightSpeed);
+
+        // Log joystick inputs and motor speeds
+        SmartDashboard.putNumber("Drivetrain/Left Speed", leftSpeed);
+        SmartDashboard.putNumber("Drivetrain/Right Speed", rightSpeed);
+        System.out.println("Drivetrain: LeftSpeed=" + leftSpeed + ", RightSpeed=" + rightSpeed);
     }
 
     public static double applyDeadband(double value, double deadband) {
@@ -44,7 +50,11 @@ public class Drivetrain extends SubsystemBase{
         // Example: Stop the drivetrain if a fault is detected
         if (faults != 0 || stickyFaults != 0) {
             differentialDrive.tankDrive(0, 0);
+            System.out.println("FAULT: Drivetrain stopped because fault was detected!!");
         }
+
+        SmartDashboard.putNumber("Drivetrain/Left Voltage", leftmotor1.getBusVoltage());
+        SmartDashboard.putNumber("Drivetrain/Right Voltage", rightmotor1.getBusVoltage());
     }
     
 }

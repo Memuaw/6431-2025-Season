@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Pivot extends SubsystemBase {
     
@@ -36,7 +37,9 @@ public class Pivot extends SubsystemBase {
     }
 
     public double getEncoderAngle() {
-        return pivotEncoder.getDistance();
+        double angle = pivotEncoder.getDistance();
+        SmartDashboard.putNumber("Pivot/Angle", angle);
+        return angle;
     }
 
     public boolean isUp() {
@@ -47,6 +50,7 @@ public class Pivot extends SubsystemBase {
         } else if (angle_value >= downPosition - allowedError && angle_value <= downPosition + allowedError){
             IsUp = false;
         } else {
+            System.out.println("Pivot motor isn't detected to be up or down so isUp is equal to whichever target position it is closer to!!");
             double diff1 = Math.abs(angle_value - upPosition);
             double diff2 = Math.abs(angle_value - downPosition);
 
@@ -57,6 +61,7 @@ public class Pivot extends SubsystemBase {
             }
             
         }
+        SmartDashboard.putBoolean("Pivot/isUp", IsUp);
 
         return IsUp;
     }
@@ -71,6 +76,8 @@ public class Pivot extends SubsystemBase {
         output = Math.max(minOutput, Math.min(maxOutput, output));
 
         pivotMotor.set(output);
+        SmartDashboard.putBoolean("Pivot/Moving Up", true);
+        System.out.println("Pivot moving up");
         
         IsUp = isUp();
     }
@@ -85,6 +92,8 @@ public class Pivot extends SubsystemBase {
         output = Math.max(minOutput, Math.min(maxOutput, output));
 
         pivotMotor.set(output);
+        SmartDashboard.putBoolean("Pivot/Moving Down", true);
+        System.out.println("Pivot moving down");
         
         IsUp = isUp();
     }
@@ -100,8 +109,10 @@ public class Pivot extends SubsystemBase {
     @Override
     public void periodic() {
         double angle = getEncoderAngle();
+        SmartDashboard.putNumber("Pivot/Angle", angle);
         if (angle < downPosition || angle > upPosition) {
             pivotMotor.set(0); // Stop motor if out of bounds
+            System.out.println("PIVOT STOPPED: Pivot motor was stopped because the angle was detected to be out of bounds!!");
         }
     }
 

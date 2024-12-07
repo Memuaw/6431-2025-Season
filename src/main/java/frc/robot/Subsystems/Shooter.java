@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends SubsystemBase {
 
@@ -24,6 +25,8 @@ public class Shooter extends SubsystemBase {
         shooterMotor2.set(1.0); // Full speed; adjust as necessary
         timer.reset(); // Reset the timer
         timer.start(); // Start the timer
+        SmartDashboard.putBoolean("Shooter/Running", true);
+        System.out.println("Shooter started");
     }
 
     // Method to stop the shooter
@@ -31,6 +34,8 @@ public class Shooter extends SubsystemBase {
         shooterMotor1.set(0); // Stop the motor
         shooterMotor2.set(0); // Stop the motor
         timer.stop(); // Stop the timer
+        SmartDashboard.putBoolean("Shooter/Running", false);
+        System.out.println("Shooter stopped after " + timer.get() + " seconds");
     }
 
     @Override
@@ -38,6 +43,9 @@ public class Shooter extends SubsystemBase {
         if (timer.get() > MAX_RUNTIME) {
             stopShooter();
             timer.stop();
+            System.out.println("SHOOTER STOPPED: Shooter has been stopped because the shooter was open for more than 5 seconds!!");
         }
+
+        SmartDashboard.putNumber("Shooter/Elapsed Time", timer.get());
     }
 }
