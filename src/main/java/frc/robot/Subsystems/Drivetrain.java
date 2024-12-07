@@ -38,7 +38,13 @@ public class Drivetrain extends SubsystemBase{
 
     @Override
     public void periodic() {
-        
+        int faults = leftmotor1.getFaults();
+        int stickyFaults = leftmotor1.getStickyFaults();
+
+        // Example: Stop the drivetrain if a fault is detected
+        if (faults != 0 || stickyFaults != 0) {
+            differentialDrive.tankDrive(0, 0);
+        }
     }
     
 }
