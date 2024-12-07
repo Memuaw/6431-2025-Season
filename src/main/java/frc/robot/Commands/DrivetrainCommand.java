@@ -22,11 +22,9 @@ public class DrivetrainCommand extends Command {
 
     @Override
     public void execute() {
-         // Get joystick values from the controller
-        double leftY = -controller.getLeftY();
-        double rightY = -controller.getRightY();
+        double leftY = Drivetrain.applyDeadband(-controller.getLeftY(), 0.1);
+        double rightY = Drivetrain.applyDeadband(-controller.getRightY(), 0.1);
 
-        // Pass joystick values to the drivetrain
         drivetrain.tankDrive(leftY, rightY);
     }
 

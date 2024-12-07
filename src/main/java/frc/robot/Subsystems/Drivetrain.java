@@ -30,6 +30,12 @@ public class Drivetrain extends SubsystemBase{
         differentialDrive.tankDrive(leftSpeed, rightSpeed);
     }
 
+    public static double applyDeadband(double value, double deadband) {
+        if (Math.abs(value) < deadband) return 0;
+        return value;
+    }
+    
+
     @Override
     public void periodic() {
         
