@@ -97,5 +97,12 @@ public class Pivot extends SubsystemBase {
         }
     }
 
+    @Override
+    public void periodic() {
+        double angle = getEncoderAngle();
+        if (angle < downPosition || angle > upPosition) {
+            pivotMotor.set(0); // Stop motor if out of bounds
+        }
+    }
 
 }
