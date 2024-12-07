@@ -12,14 +12,14 @@ public class Pivot extends SubsystemBase {
     private SparkPIDController pivotPID;
     private DutyCycleEncoder pivotEncoder;
     private Boolean IsUp;
-    private static final double upPosition = 0.0;
-    private static final double downPosition = 0.0;
+    private static final double upPosition = 244.2;
+    private static final double downPosition = 119.6;
     private static final double maxOutput = 1.0;
     private static final double minOutput = -1.0;
     private static final double kP = 0.1;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
-    private static final double allowedError = 0.05;
+    private static final double allowedError = 15;
 
     public Pivot() {
         pivotMotor = new CANSparkMax(3, MotorType.kBrushless);
