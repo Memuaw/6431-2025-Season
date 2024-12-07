@@ -19,13 +19,14 @@ public class Pivot extends SubsystemBase {
     private static final double kP = 0.1;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
-    private static final double allowedError = 0.0;
+    private static final double allowedError = 0.05;
 
     public Pivot() {
         pivotMotor = new CANSparkMax(3, MotorType.kBrushless);
         IsUp = true;
         pivotPID = pivotMotor.getPIDController();
         pivotEncoder = new DutyCycleEncoder(0);
+        pivotEncoder.setDistancePerRotation(360);
 
         pivotPID.setP(kP);
         pivotPID.setI(kI);
@@ -34,14 +35,50 @@ public class Pivot extends SubsystemBase {
         pivotPID.setOutputRange(minOutput, maxOutput);
     }
 
+    public double getEncoderAngle() {
+        return pivotEncoder.getDistance();
+    }
+
+    public boolean isUp() {
+        double angle_value = getEncoderAngle();
+
+        if (angle_value >= upPosition - allowedError && angle_value <= upPosition + allowedError) {
+            IsUp = true;
+        } else if (angle_value >= downPosition - allowedError && angle_value <= downPosition + allowedError){
+            IsUp = false;
+        } else {
+            IsUp = null;
+        }
+
+        return IsUp;
+    }
+
     public void pivotUp() {
-        pivotPID.setReference(upPosition, com.revrobotics.ControlType.kPosition);
-        IsUp = true; 
+        double currentAngle = getEncoderAngle();
+
+        double error = upPosition - currentAngle;
+
+        double output = kP * error;
+
+        output = Math.max(minOutput, Math.min(maxOutput, output));
+
+        pivotMotor.set(output);
+        
+        IsUp = isUp();
     }
 
     public void pivotDown() {
-        pivotPID.setReference(downPosition, com.revrobotics.ControlType.kPosition);
-        IsUp = false;
+        double currentAngle = getEncoderAngle();
+
+        double error = downPosition - currentAngle;
+
+        double output = kP * error;
+
+        output = Math.max(minOutput, Math.min(maxOutput, output));
+
+        pivotMotor.set(output);
+        
+        IsUp = isUp();
     }
 
     public void togglePivot() {
