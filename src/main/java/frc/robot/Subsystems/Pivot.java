@@ -23,7 +23,6 @@ public class Pivot extends SubsystemBase {
 
     public Pivot() {
         pivotMotor = new CANSparkMax(3, MotorType.kBrushless);
-        IsUp = true;
         pivotPID = pivotMotor.getPIDController();
         pivotEncoder = new DutyCycleEncoder(0);
         pivotEncoder.setDistancePerRotation(360);
@@ -33,6 +32,7 @@ public class Pivot extends SubsystemBase {
         pivotPID.setD(kD);
 
         pivotPID.setOutputRange(minOutput, maxOutput);
+        IsUp = isUp();
     }
 
     public double getEncoderAngle() {
@@ -47,7 +47,15 @@ public class Pivot extends SubsystemBase {
         } else if (angle_value >= downPosition - allowedError && angle_value <= downPosition + allowedError){
             IsUp = false;
         } else {
-            IsUp = null;
+            double diff1 = Math.abs(angle_value - upPosition);
+            double diff2 = Math.abs(angle_value - downPosition);
+
+            if (diff1 < diff2) {
+                IsUp = true;
+            } else {
+                IsUp = false;
+            }
+            
         }
 
         return IsUp;
