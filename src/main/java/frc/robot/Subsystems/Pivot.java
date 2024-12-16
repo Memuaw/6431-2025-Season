@@ -13,11 +13,11 @@ public class Pivot extends SubsystemBase {
     private SparkPIDController pivotPID;
     private DutyCycleEncoder pivotEncoder;
     private Boolean IsUp;
-    private static final double upPosition = 244.2;
-    private static final double downPosition = 119.6;
-    private static final double maxOutput = 1.0;
-    private static final double minOutput = -1.0;
-    private static final double kP = 0.1;
+    private static final double upPosition = 2;
+    private static final double downPosition = 100;
+    private static final double maxOutput = 0.3;
+    private static final double minOutput = -0.3;
+    private static final double kP = 0.2;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
     private static final double allowedError = 15;
@@ -40,6 +40,9 @@ public class Pivot extends SubsystemBase {
         double angle = pivotEncoder.getDistance();
         SmartDashboard.putNumber("Pivot/Angle", angle);
         return angle;
+    }
+    public void resetEncoder(){
+        pivotEncoder.reset();
     }
 
     public boolean isUp() {
@@ -107,9 +110,6 @@ public class Pivot extends SubsystemBase {
     public void periodic() {
         double angle = getEncoderAngle();
         SmartDashboard.putNumber("Pivot/Angle", angle);
-        if (angle < downPosition || angle > upPosition) {
-            pivotMotor.set(0); // Stop motor if out of bounds
-        }
     }
 
 }

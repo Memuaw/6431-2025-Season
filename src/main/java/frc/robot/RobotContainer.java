@@ -13,6 +13,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
        Constants.Circle.onTrue(Constants.ShootCommand);
        Constants.Cross.onTrue(Constants.ToggleIntakeCommand);
+       Constants.L2.onTrue(Constants.TogglePivotCommand);
     }
 
     public Command getAutonomousCommand() {
