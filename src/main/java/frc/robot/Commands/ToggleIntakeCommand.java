@@ -18,7 +18,7 @@ public class ToggleIntakeCommand extends Command {
     public void initialize() {
         // Toggle the intake when the command is initialized
         intake.toggleIntake();
-        System.out.println("ToggleIntakeCommand started");
+        
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ToggleIntakeCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("ToggleIntakeCommand ended. Interrupted: " + interrupted);
+        
     }
 
     @Override

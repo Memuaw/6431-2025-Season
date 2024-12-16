@@ -23,7 +23,7 @@ public class Pivot extends SubsystemBase {
     private static final double allowedError = 15;
 
     public Pivot() {
-        pivotMotor = new CANSparkMax(3, MotorType.kBrushless);
+        pivotMotor = new CANSparkMax(50, MotorType.kBrushless);
         pivotPID = pivotMotor.getPIDController();
         pivotEncoder = new DutyCycleEncoder(0);
         pivotEncoder.setDistancePerRotation(360);
@@ -50,7 +50,6 @@ public class Pivot extends SubsystemBase {
         } else if (angle_value >= downPosition - allowedError && angle_value <= downPosition + allowedError){
             IsUp = false;
         } else {
-            System.out.println("Pivot motor isn't detected to be up or down so isUp is equal to whichever target position it is closer to!!");
             double diff1 = Math.abs(angle_value - upPosition);
             double diff2 = Math.abs(angle_value - downPosition);
 
@@ -77,7 +76,6 @@ public class Pivot extends SubsystemBase {
 
         pivotMotor.set(output);
         SmartDashboard.putBoolean("Pivot/Moving Up", true);
-        System.out.println("Pivot moving up");
         
         IsUp = isUp();
     }
@@ -93,7 +91,6 @@ public class Pivot extends SubsystemBase {
 
         pivotMotor.set(output);
         SmartDashboard.putBoolean("Pivot/Moving Down", true);
-        System.out.println("Pivot moving down");
         
         IsUp = isUp();
     }
@@ -112,7 +109,6 @@ public class Pivot extends SubsystemBase {
         SmartDashboard.putNumber("Pivot/Angle", angle);
         if (angle < downPosition || angle > upPosition) {
             pivotMotor.set(0); // Stop motor if out of bounds
-            System.out.println("PIVOT STOPPED: Pivot motor was stopped because the angle was detected to be out of bounds!!");
         }
     }
 

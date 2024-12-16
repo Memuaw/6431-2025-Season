@@ -2,13 +2,13 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.Drivetrain;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS5Controller;
 
 public class DrivetrainCommand extends Command {
     private final Drivetrain drivetrain;
-    private final XboxController controller;
+    private final PS5Controller controller;
 
-    public DrivetrainCommand(Drivetrain drivetrain, XboxController controller) {
+    public DrivetrainCommand(Drivetrain drivetrain, PS5Controller controller) {
         this.drivetrain = drivetrain;
         this.controller = controller;
 
@@ -22,10 +22,10 @@ public class DrivetrainCommand extends Command {
 
     @Override
     public void execute() {
-        double leftY = Drivetrain.applyDeadband(-controller.getLeftY(), 0.1);
-        double rightY = Drivetrain.applyDeadband(-controller.getRightY(), 0.1);
+        double leftY = Drivetrain.applyDeadband(controller.getLeftY(), 0.15);
+        double rightX = Drivetrain.applyDeadband(controller.getRightX(), 0.15);
 
-        drivetrain.tankDrive(leftY, rightY);
+        drivetrain.tankDrive(rightX, leftY);
     }
 
     @Override

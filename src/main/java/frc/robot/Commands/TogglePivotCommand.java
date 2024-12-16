@@ -15,11 +15,9 @@ public class TogglePivotCommand extends Command {
     @Override
     public void initialize() {
         pivot.togglePivot();
-        System.out.println("TogglePivotCommand started");
     }
 
     public void end(boolean interrupted) {
-        System.out.println("TogglePivotCommand ended. Interrupted: " + interrupted);
     }
 
     @Override

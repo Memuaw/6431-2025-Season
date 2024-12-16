@@ -12,7 +12,7 @@ public class Intake extends SubsystemBase {
     private long startTime;
 
     public Intake() {
-        intakeMotor = new CANSparkMax(2, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
         isRunning = false; // Initially, the intake is off
         startTime = 0;
     }
@@ -23,7 +23,6 @@ public class Intake extends SubsystemBase {
         intakeMotor.set(0.5); // Adjust speed as needed (positive for intake direction)
         isRunning = true;
         SmartDashboard.putBoolean("Intake/Running", true);
-        System.out.println("Intake started");
     }
 
     // Method to stop the intake
@@ -32,7 +31,6 @@ public class Intake extends SubsystemBase {
         intakeMotor.set(0); // Stop the motor
         isRunning = false;
         SmartDashboard.putBoolean("Intake/Running", false);
-        System.out.println("Intake stopped");
     }
 
     // Method to toggle the intake state
@@ -48,7 +46,6 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         if (isRunning && (System.currentTimeMillis() - startTime) > 10000) { // 10 seconds
             stopIntake();
-            System.out.println("INTAKE STOPPED: Intake has been stopped because it was left running for more than 10 seconds!!");
         }
     }
 }

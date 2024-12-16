@@ -15,25 +15,24 @@ public class Drivetrain extends SubsystemBase{
     private final DifferentialDrive differentialDrive;
 
     public Drivetrain() {
-        leftmotor1 = new CANSparkMax(8, MotorType.kBrushless);
-        rightmotor1 = new CANSparkMax(6, MotorType.kBrushless);
-        leftmotor2 = new CANSparkMax(9, MotorType.kBrushless);
-        rightmotor2 = new CANSparkMax(7, MotorType.kBrushless);
+        leftmotor1 = new CANSparkMax(4, MotorType.kBrushless);
+        rightmotor1 = new CANSparkMax(9, MotorType.kBrushless);
+        leftmotor2 = new CANSparkMax(41, MotorType.kBrushless);
+        rightmotor2 = new CANSparkMax(10, MotorType.kBrushless);
 
         leftmotor1.follow(leftmotor2);
         rightmotor1.follow(rightmotor2);
 
         leftmotor1.setInverted(true);
-        differentialDrive = new DifferentialDrive(leftmotor1, rightmotor1);
+        differentialDrive = new DifferentialDrive(leftmotor2, rightmotor2);
     }
 
-    public void tankDrive(double leftSpeed, double rightSpeed) {
-        differentialDrive.tankDrive(leftSpeed, rightSpeed);
+    public void tankDrive(double leftSpeed, double Zrot) {
+        differentialDrive.arcadeDrive(leftSpeed, Zrot);
 
         // Log joystick inputs and motor speeds
         SmartDashboard.putNumber("Drivetrain/Left Speed", leftSpeed);
-        SmartDashboard.putNumber("Drivetrain/Right Speed", rightSpeed);
-        System.out.println("Drivetrain: LeftSpeed=" + leftSpeed + ", RightSpeed=" + rightSpeed);
+        SmartDashboard.putNumber("Drivetrain/Right Speed", Zrot);
     }
 
     public static double applyDeadband(double value, double deadband) {
@@ -44,15 +43,6 @@ public class Drivetrain extends SubsystemBase{
 
     @Override
     public void periodic() {
-        int faults = leftmotor1.getFaults();
-        int stickyFaults = leftmotor1.getStickyFaults();
-
-        // Example: Stop the drivetrain if a fault is detected
-        if (faults != 0 || stickyFaults != 0) {
-            differentialDrive.tankDrive(0, 0);
-            System.out.println("FAULT: Drivetrain stopped because fault was detected!!");
-        }
-
         SmartDashboard.putNumber("Drivetrain/Left Voltage", leftmotor1.getBusVoltage());
         SmartDashboard.putNumber("Drivetrain/Right Voltage", rightmotor1.getBusVoltage());
     }
