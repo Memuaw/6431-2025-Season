@@ -23,7 +23,7 @@ public class Pivot extends SubsystemBase {
     private static final double allowedError = 15;
 
     public Pivot() {
-        pivotMotor = new CANSparkMax(50, MotorType.kBrushless);
+        pivotMotor = new CANSparkMax(33, MotorType.kBrushless);
         pivotPID = pivotMotor.getPIDController();
         pivotEncoder = new DutyCycleEncoder(0);
         pivotEncoder.setDistancePerRotation(360);
