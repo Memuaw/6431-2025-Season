@@ -75,6 +75,7 @@ public class Intake extends SubsystemBase {
 public void periodic() {
     SmartDashboard.putBoolean("Intake/Running", isRunning);
     SmartDashboard.putBoolean("Intake/Opposite", isOpposite);
+    SmartDashboard.putNumber("Intake/MotorSpeed", intakeMotor.get());
 
     // Safety timeout for forward intake
     if (isRunning && (System.currentTimeMillis() - startTime) > 10000) { 
