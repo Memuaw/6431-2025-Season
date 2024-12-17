@@ -5,13 +5,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
     private final CANSparkMax shooterMotor1;
     private final CANSparkMax shooterMotor2;
     private final Timer timer; // Timer for runtime limit
-    private static final double MAX_RUNTIME = 5.0; // 5 seconds
+    private static final double MAX_RUNTIME = Constants.ShooterMaxRuntime; // 5 seconds
 
     public Shooter() {
         shooterMotor1 = new CANSparkMax(42, MotorType.kBrushless);
@@ -21,8 +22,8 @@ public class Shooter extends SubsystemBase {
 
     // Method to start the shooter
     public void startShooter() {
-        shooterMotor1.set(-0.8); // Full speed; adjust as necessary
-        shooterMotor2.set(0.8); // Full speed; adjust as necessary
+        shooterMotor1.set(-Constants.ShooterSpeed); // Full speed; adjust as necessary
+        shooterMotor2.set(Constants.ShooterSpeed); // Full speed; adjust as necessary
         timer.reset(); // Reset the timer
         timer.start(); // Start the timer
         SmartDashboard.putBoolean("Shooter/Running", true);

@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
@@ -22,14 +23,14 @@ public class Intake extends SubsystemBase {
     // Method to start the intake
     public void startIntake() {
         if (startTime == 0) startTime = System.currentTimeMillis();
-        intakeMotor.set(0.5); // Adjust speed as needed (positive for intake direction)
+        intakeMotor.set(Constants.IntakeSpeed); // Adjust speed as needed (positive for intake direction)
         isRunning = true;
         SmartDashboard.putBoolean("Intake/Running", true);
     }
 
     public void oppositeIntake() {
         if (startTime == 0) startTime = System.currentTimeMillis();
-        intakeMotor.set(-0.5);
+        intakeMotor.set(-Constants.IntakeSpeed);
         isOpposite = true;
     }
 

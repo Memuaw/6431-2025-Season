@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class Pivot extends SubsystemBase {
 
@@ -21,21 +22,21 @@ public class Pivot extends SubsystemBase {
     private final ArmFeedforward armFeedforward;
 
     // PID and feedforward constants
-    private static final double kP = 0.2;
-    private static final double kI = 0.0;
-    private static final double kD = 0.0;
+    private static final double kP = Constants.PivotkP;
+    private static final double kI = Constants.PivotkI;
+    private static final double kD = Constants.PivotkD;
 
-    private static final double kS = 0.2;  // Static friction compensation (volts)
-    private static final double kG = 0.4;  // Gravity compensation (volts)
-    private static final double kV = 1.0;  // Velocity feedforward (optional)
+    private static final double kS = Constants.PivotkS;  // Static friction compensation (volts)
+    private static final double kG = Constants.PivotkG;  // Gravity compensation (volts)
+    private static final double kV = Constants.PivotkV;  // Velocity feedforward (optional)
 
     // Target positions
-    private static final double upPosition = 5.0;      // Degrees
-    private static final double downPosition = 135.0;  // Degrees
-    private static final double allowedError = 12.0;    // Degrees
+    private static final double upPosition = Constants.PivotUpPosition;      // Degrees
+    private static final double downPosition = Constants.PivotDownPosition;  // Degrees
+    private static final double allowedError = Constants.PivotAllowedError;    // Degrees
 
-    private static final double maxOutput = 0.3;
-    private static final double minOutput = -0.3;
+    private static final double maxOutput = Constants.PivotMaxOutput;
+    private static final double minOutput = Constants.PivotMinOutput;
 
     private boolean isUp = false;  // Tracks the target position (up or down)
 
