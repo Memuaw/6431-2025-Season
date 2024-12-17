@@ -14,7 +14,7 @@ public class Pivot extends SubsystemBase {
     private DutyCycleEncoder pivotEncoder;
     private Boolean IsUp;
     private static final double upPosition = 2;
-    private static final double downPosition = 100;
+    private static final double downPosition = 135;
     private static final double maxOutput = 0.3;
     private static final double minOutput = -0.3;
     private static final double kP = 0.2;

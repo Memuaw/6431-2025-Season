@@ -9,11 +9,13 @@ public class Intake extends SubsystemBase {
 
     private final CANSparkMax intakeMotor; // Motor for the intake system
     private boolean isRunning; // Tracks whether the intake is running
+    private boolean isOpposite;
     private long startTime;
 
     public Intake() {
         intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
         isRunning = false; // Initially, the intake is off
+        isOpposite = false;
         startTime = 0;
     }
 
@@ -25,6 +27,12 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Intake/Running", true);
     }
 
+    public void oppositeIntake() {
+        if (startTime == 0) startTime = System.currentTimeMillis();
+        intakeMotor.set(-0.5);
+        isOpposite = true;
+    }
+
     // Method to stop the intake
     public void stopIntake() {
         startTime = 0;
@@ -33,12 +41,26 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Intake/Running", false);
     }
 
+    public void stopOppositeIntake() {
+        startTime = 0;
+        intakeMotor.set(0);
+        isOpposite = false;
+    }
+
     // Method to toggle the intake state
     public void toggleIntake() {
         if (isRunning) {
             stopIntake();
         } else {
             startIntake();
+        }
+    }
+
+    public void toggleOpposite() {
+        if (isOpposite) {
+            stopOppositeIntake();
+        } else {
+            oppositeIntake();
         }
     }
 

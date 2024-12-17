@@ -3,11 +3,11 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.Intake;
 
-public class ToggleIntakeCommand extends Command {
+public class ToggleOpIntakeCommand extends Command {
 
     private final Intake intake;
 
-    public ToggleIntakeCommand(Intake intake) {
+    public ToggleOpIntakeCommand(Intake intake) {
         this.intake = intake;
 
         // Declare subsystem dependencies
@@ -17,7 +17,7 @@ public class ToggleIntakeCommand extends Command {
     @Override
     public void initialize() {
         // Toggle the intake when the command is initialized
-        intake.toggleIntake();
+        intake.toggleOpposite();
     }
 
     @Override
