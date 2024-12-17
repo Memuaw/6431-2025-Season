@@ -49,25 +49,37 @@ public class Intake extends SubsystemBase {
 
     // Method to toggle the intake state
     public void toggleIntake() {
+        if (isOpposite) { // If the intake is running in the opposite direction, stop it
+            stopOppositeIntake();
+        }
         if (isRunning) {
             stopIntake();
         } else {
             startIntake();
         }
     }
-
+    
     public void toggleOpposite() {
+        if (isRunning) { // If the intake is running forward, stop it
+            stopIntake();
+        }
         if (isOpposite) {
             stopOppositeIntake();
         } else {
             oppositeIntake();
         }
     }
+    
 
     @Override
-    public void periodic() {
-        if (isRunning && (System.currentTimeMillis() - startTime) > 10000) { // 10 seconds
-            stopIntake();
-        }
+public void periodic() {
+    SmartDashboard.putBoolean("Intake/Running", isRunning);
+    SmartDashboard.putBoolean("Intake/Opposite", isOpposite);
+
+    // Safety timeout for forward intake
+    if (isRunning && (System.currentTimeMillis() - startTime) > 10000) { 
+        stopIntake();
     }
+}
+
 }

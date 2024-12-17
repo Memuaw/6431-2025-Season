@@ -30,9 +30,9 @@ public class Pivot extends SubsystemBase {
     private static final double kV = 1.0;  // Velocity feedforward (optional)
 
     // Target positions
-    private static final double upPosition = 2.0;      // Degrees
+    private static final double upPosition = 5.0;      // Degrees
     private static final double downPosition = 135.0;  // Degrees
-    private static final double allowedError = 5.0;    // Degrees
+    private static final double allowedError = 12.0;    // Degrees
 
     private static final double maxOutput = 0.3;
     private static final double minOutput = -0.3;
