@@ -3,10 +3,10 @@ package frc.robot.Subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -16,7 +16,7 @@ public class Pivot extends SubsystemBase {
     // Motor and encoder
     private final CANSparkMax pivotMotor;
     private final SparkPIDController pivotPID;
-    private final DutyCycleEncoder pivotEncoder;
+    private final RelativeEncoder pivotEncoder;
 
     // Gravity compensation using ArmFeedforward
     private final ArmFeedforward armFeedforward;
@@ -33,10 +33,11 @@ public class Pivot extends SubsystemBase {
     // Target positions
     private static final double upPosition = Constants.PivotUpPosition;      // Degrees
     private static final double downPosition = Constants.PivotDownPosition;  // Degrees
+    private static final double startPosition = Constants.PivotStartPosition;  // Degrees
     private static final double allowedError = Constants.PivotAllowedError;    // Degrees
 
-    private static final double maxOutput = Constants.PivotMaxOutput;
-    private static final double minOutput = Constants.PivotMinOutput;
+    private static final double maxOutput1 = Constants.PivotMaxOutput1;
+    private static final double minOutput1 = Constants.PivotMinOutput1;
 
     private boolean isUp = false;  // Tracks the target position (up or down)
 
@@ -45,9 +46,11 @@ public class Pivot extends SubsystemBase {
         pivotMotor = new CANSparkMax(33, MotorType.kBrushless);
         pivotPID = pivotMotor.getPIDController();
 
-        // Encoder setup
-        pivotEncoder = new DutyCycleEncoder(0);
-        pivotEncoder.setDistancePerRotation(360.0);  // 1 full rotation = 360 degrees
+        // Encoder setup: Use the built-in NEO relative encoder
+        pivotEncoder = pivotMotor.getEncoder();
+
+        // Configure encoder: Set position conversion factor (rotations to degrees)
+        pivotEncoder.setPositionConversionFactor(360.0); // 1 rotation = 360 degrees
 
         // Feedforward setup
         armFeedforward = new ArmFeedforward(kS, kG, kV);
@@ -56,24 +59,37 @@ public class Pivot extends SubsystemBase {
         pivotPID.setP(kP);
         pivotPID.setI(kI);
         pivotPID.setD(kD);
-        pivotPID.setOutputRange(minOutput, maxOutput);
+        pivotPID.setOutputRange(minOutput1, maxOutput1);
 
         // Reset encoder at subsystem initialization
         resetEncoder();
         updateIsUp();
     }
 
+    /**
+     * Resets the encoder position to 0.
+     */
     public void resetEncoder() {
-        pivotEncoder.reset();
+        pivotEncoder.setPosition(0.0);  // Reset relative encoder to 0
         SmartDashboard.putString("Pivot", "Encoder Reset");
     }
 
+    /**
+     * Gets the current pivot angle from the encoder.
+     *
+     * @return The current angle in degrees.
+     */
     public double getEncoderAngle() {
-        double angle = pivotEncoder.getDistance();
+        double angle = pivotEncoder.getPosition(); // Encoder reports angle in degrees
         SmartDashboard.putNumber("Pivot/Angle", angle);
         return angle;
     }
 
+    /**
+     * Determines if the pivot is in the "up" position.
+     *
+     * @return True if the pivot is at the "up" position, false otherwise.
+     */
     public boolean isUp() {
         double currentAngle = getEncoderAngle();
 
@@ -83,9 +99,19 @@ public class Pivot extends SubsystemBase {
         return up;
     }
 
+    /**
+     * Moves the pivot to the "up" position, using PID and feedforward.
+     */
     public void pivotUp() {
+        // Reset encoder and PID at the start
+        resetEncoder();
+        pivotPID.setP(kP); // Reinitialize PID gains, if needed
+        pivotPID.setI(kI);
+        pivotPID.setD(kD);
+
         double currentAngleRadians = Math.toRadians(getEncoderAngle());
         double feedforward = armFeedforward.calculate(currentAngleRadians, 0);  // Feedforward with 0 velocity
+
 
         pivotPID.setReference(upPosition, ControlType.kPosition, 0, feedforward);
         isUp = isUp();  // Update isUp status using the isUp() method
@@ -93,7 +119,31 @@ public class Pivot extends SubsystemBase {
         SmartDashboard.putString("Pivot", "Moving Up");
     }
 
+    public void pivotToStart() {
+        // Reset encoder and PID at the start
+        resetEncoder();
+        pivotPID.setP(kP); // Reinitialize PID gains, if needed
+        pivotPID.setI(kI);
+        pivotPID.setD(kD);
+
+        double currentAngleRadians = Math.toRadians(getEncoderAngle());
+        double feedforward = armFeedforward.calculate(currentAngleRadians, 0);  // Feedforward with 0 velocity
+
+
+        pivotPID.setReference(startPosition, ControlType.kPosition, 0, feedforward);
+        isUp = isUp();  // Update isUp status using the isUp() method
+    }
+
+    /**
+     * Moves the pivot to the "down" position, using PID and feedforward.
+     */
     public void pivotDown() {
+        // Reset encoder and PID at the start
+        resetEncoder();
+        pivotPID.setP(kP); // Reinitialize PID gains, if needed
+        pivotPID.setI(kI);
+        pivotPID.setD(kD);
+
         double currentAngleRadians = Math.toRadians(getEncoderAngle());
         double feedforward = armFeedforward.calculate(currentAngleRadians, 0);  // Feedforward with 0 velocity
 
@@ -103,14 +153,15 @@ public class Pivot extends SubsystemBase {
         SmartDashboard.putString("Pivot", "Moving Down");
     }
 
-    public void togglePivot() {
-        if (isUp) {
-            pivotDown();
-        } else {
-            pivotUp();
-        }
-    }
+    /**
+     * Toggles the pivot between the up and down positions.
+     */
 
+    /**
+     * Checks if the pivot is at the target position.
+     *
+     * @return True if the pivot is within the allowed error of the target position.
+     */
     public boolean atTargetPosition() {
         double currentAngle = getEncoderAngle();
         double targetPosition = isUp ? upPosition : downPosition;
@@ -120,6 +171,9 @@ public class Pivot extends SubsystemBase {
         return atTarget;
     }
 
+    /**
+     * Updates the internal isUp flag based on the current position.
+     */
     private void updateIsUp() {
         isUp = isUp();  // Update isUp status
     }
@@ -127,8 +181,10 @@ public class Pivot extends SubsystemBase {
     @Override
     public void periodic() {
         // Update SmartDashboard with pivot status
-        getEncoderAngle();
+        double angle = getEncoderAngle();
         SmartDashboard.putBoolean("Pivot/Is Up", isUp);
+        SmartDashboard.putNumber("Pivot/Encoder", angle);
         SmartDashboard.putBoolean("Pivot/At Target", atTargetPosition());
+        System.out.println(getEncoderAngle());
     }
 }

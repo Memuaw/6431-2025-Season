@@ -14,7 +14,8 @@ public class RobotContainer {
        Constants.Circle.onTrue(Constants.ShootCommand);
        Constants.Cross.onTrue(Constants.ToggleIntakeCommand);
        Constants.Triangle.onTrue(Constants.ToggleOpIntakeCommand);
-       Constants.L2.onTrue(Constants.TogglePivotCommand);
+       Constants.L2.onTrue(Constants.PivotUp);
+       Constants.L2.onTrue(Constants.PivotDown);
     }
 
     public Command getAutonomousCommand() {

@@ -13,6 +13,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     Constants.pivot.resetEncoder();
+    Constants.pivot.pivotToStart();
   }
 
   @Override
