@@ -31,7 +31,7 @@ public class Constants {
 
     public final static double IntakeSpeed = 0.5;
     public final static double ShooterSpeed = 0.8;  
-    public final static double ShooterMaxRuntime = 5.0;
+    public final static double ShooterMaxRuntime = 7.0;
     public final static double PivotkP = 0.2; 
     public final static double PivotkI = 0.0;
     public final static double PivotkD = 0.0;
