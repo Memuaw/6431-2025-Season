@@ -28,6 +28,7 @@ public class Constants {
     public final static JoystickButton Circle = new JoystickButton(Controller, PS5Controller.Button.kCircle.value);
     public final static JoystickButton Cross = new JoystickButton(Controller, PS5Controller.Button.kCross.value);
     public final static JoystickButton Triangle = new JoystickButton(Controller, PS5Controller.Button.kTriangle.value);
+    public final static JoystickButton Square = new JoystickButton(Controller, PS5Controller.Button.kSquare.value);
 
     public final static double IntakeSpeed = 0.5;
     public final static double ShooterSpeed = 0.8;  
