@@ -3,10 +3,10 @@ package frc.robot.Subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -16,7 +16,7 @@ public class Pivot extends SubsystemBase {
     // Motor and encoder
     private final CANSparkMax pivotMotor;
     private final SparkPIDController pivotPID;
-    private final DutyCycleEncoder pivotEncoder; // Use a DutyCycleEncoder now
+    private final RelativeEncoder pivotEncoder; // Use a RelativeEncoder now
 
     // Gravity compensation using ArmFeedforward
     private final ArmFeedforward armFeedforward;
@@ -41,14 +41,14 @@ public class Pivot extends SubsystemBase {
 
     private boolean isUp = false;  // Tracks the target position (up or down)
 
-    public Pivot() {
+    public Pivot() {   
         // Motor and PID setup
         pivotMotor = new CANSparkMax(33, MotorType.kBrushless);
         pivotPID = pivotMotor.getPIDController();
 
-        // Encoder setup: Use a DutyCycleEncoder on DIO port 8
-        pivotEncoder = new DutyCycleEncoder(8);
-        pivotEncoder.setDistancePerRotation(360.0); // 1 rotation = 360 degrees
+        // Encoder setup: Use the built-in RelativeEncoder from the NEO
+        pivotEncoder = pivotMotor.getEncoder();
+        pivotEncoder.setPositionConversionFactor(360.0); // 1 rotation = 360 degrees
 
         // Feedforward setup
         armFeedforward = new ArmFeedforward(kS, kG, kV);
@@ -68,7 +68,7 @@ public class Pivot extends SubsystemBase {
      * Resets the encoder position to 0.
      */
     public void resetEncoder() {
-        pivotEncoder.reset();  // Reset the DutyCycleEncoder
+        pivotEncoder.setPosition(0.0);  // Reset the RelativeEncoder to 0
         SmartDashboard.putString("Pivot", "Encoder Reset");
     }
 
@@ -78,8 +78,7 @@ public class Pivot extends SubsystemBase {
      * @return The current angle in degrees.
      */
     public double getEncoderAngle() {
-        double angle = pivotEncoder.getDistance(); // Get the angle in degrees
-        SmartDashboard.putNumber("Pivot/Angle", angle);
+        double angle = pivotEncoder.getPosition(); // Get the angle in degrees
         return angle;
     }
 
@@ -155,9 +154,9 @@ public class Pivot extends SubsystemBase {
     @Override
     public void periodic() {
         // Update SmartDashboard with pivot status
-        double angle = getEncoderAngle();
         SmartDashboard.putBoolean("Pivot/Is Up", isUp);
-        SmartDashboard.putNumber("Pivot/Encoder", angle);
+        SmartDashboard.putNumber("Pivot/Encoder", this.getEncoderAngle());
         SmartDashboard.putBoolean("Pivot/At Target", atTargetPosition());
+        SmartDashboard.putNumber("Pivot/Angle", this.getEncoderAngle());
     }
 }
