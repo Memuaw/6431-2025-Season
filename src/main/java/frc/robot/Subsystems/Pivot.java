@@ -115,6 +115,7 @@ public class Pivot extends SubsystemBase {
 
         pivotPID.setReference(startPosition, ControlType.kPosition, 0, feedforward);
         isUp = isUp();  // Update isUp status using the isUp() method
+        resetEncoder();
     }
 
     /**
