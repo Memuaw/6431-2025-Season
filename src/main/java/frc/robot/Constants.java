@@ -39,14 +39,10 @@ public class Constants {
     public final static double PivotkS = 0.2;
     public final static double PivotkG = 0.5;   
     public final static double PivotkV = 1.0;
-    public final static double PivotUpPosition = -4000.0;
-    public final static double PivotDownPosition = 4150.0;
-    public final static double PivotStartPosition = 300.0;
+    public final static double PivotUpPosition = 100.0;
+    public final static double PivotDownPosition = 3150.0;
+    public final static double PivotStartPosition = 500.0;
     public final static double PivotAllowedError = 0;
     public final static double PivotMinOutput1 = -0.11;
     public final static double PivotMaxOutput1 = 0.11;
-    public final static double PivotMinOutput2 = -0.15;
-    public final static double PivotMaxOutput2 = 0.15;
-    
-
 }
